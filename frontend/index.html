@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nabha Connect - Connect with Doctors Online</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <header class="navbar">
+        <div class="container nav-flex">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>Nabha Connect</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" data-target="home" class="nav-link active">Home</a>
+                <a href="#" data-target="services" class="nav-link">Services</a>
+                <a href="#" data-target="how" class="nav-link">How It Works</a>
+                <a href="#" data-target="about" class="nav-link">About</a>
+                <button class="btn btn-outline" id="loginBtn">Login / Register</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container hero-grid">
+                <div class="hero-left">
+                    <h1>Premium Telehealth, <span class="accent">Human-Centered</span></h1>
+                    <p class="lead">Connect instantly with certified doctors, manage records, and get prescriptions—securely and conveniently.</p>
+                    <div class="hero-ctas">
+                        <button class="btn btn-primary" id="startBtn">Get Started</button>
+                        <a href="#" class="btn btn-ghost" data-target="how">How it works</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div><strong id="statDoctors">500+</strong><span>Expert Doctors</span></div>
+                        <div><strong id="statPatients">10k+</strong><span>Happy Patients</span></div>
+                        <div><strong>24/7</strong><span>Availability</span></div>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="card hero-card">
+                        <div class="card-header">
+                            <div>
+                                <small>Video Consultation</small>
+                                <h3>Connect with a doctor now</h3>
+                            </div>
+                            <i class="fas fa-video fa-2x"></i>
+                        </div>
+                        <p class="muted">HD video, secure connection and private session notes.</p>
+                        <div class="card-actions">
+                            <button class="btn btn-primary" id="quickConsult">Start Consultation</button>
+                            <button class="btn btn-secondary" id="fillSymptoms">Fill Questionnaire</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="section">
+            <div class="container">
+                <h2 class="section-title">Services</h2>
+                <p class="section-sub">Comprehensive healthcare solutions at your fingertips</p>
+                <div class="grid services-grid">
+                    <div class="card service-card"><i class="fas fa-video fa-xl"></i><h4>Video Consultation</h4><p>Secure HD calls with certified doctors.</p></div>
+                    <div class="card service-card"><i class="fas fa-clipboard-list fa-xl"></i><h4>Symptom Assessment</h4><p>Guided questionnaire to speed diagnosis.</p></div>
+                    <div class="card service-card"><i class="fas fa-prescription fa-xl"></i><h4>Digital Prescriptions</h4><p>Get prescriptions delivered to your inbox.</p></div>
+                    <div class="card service-card"><i class="fas fa-folder-open fa-xl"></i><h4>Medical Records</h4><p>Store and access your records securely.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how" class="section light">
+            <div class="container">
+                <h2 class="section-title">How It Works</h2>
+                <div class="grid how-grid">
+                    <div class="how-step"><div class="step-no">1</div><h4>Sign Up</h4><p>Create your profile in under 2 minutes.</p></div>
+                    <div class="how-step"><div class="step-no">2</div><h4>Share Symptoms</h4><p>Complete the assessment so doctors are prepared.</p></div>
+                    <div class="how-step"><div class="step-no">3</div><h4>Start Consultation</h4><p>Video call, get diagnosis and prescriptions.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="container about-grid">
+                <div>
+                    <h2 class="section-title">About Nabha Connect</h2>
+                    <p>We make healthcare accessible to everyone by connecting patients to certified doctors through secure, easy-to-use tools.</p>
+                    <ul class="about-features">
+                        <li><i class="fas fa-check-circle"></i> Certified Doctors</li>
+                        <li><i class="fas fa-lock"></i> HIPAA-style data protection</li>
+                        <li><i class="fas fa-dollar-sign"></i> Affordable Pricing</li>
+                    </ul>
+                </div>
+                <div class="card contact-card">
+                    <h3>Contact Us</h3>
+                    <p class="muted">support@nabhaconnect.com</p>
+                    <p class="muted">+1 (555) 123-4567</p>
+                    <div class="social-links"><a href="#"><i class="fab fa-facebook"></i></a><a href="#"><i class="fab fa-linkedin"></i></a></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard (hidden until login) -->
+        <section id="dashboard" class="section dashboard-section" style="display:none;">
+            <div class="container">
+                <div class="dashboard-top">
+                    <h2 id="dashboardTitle">Dashboard</h2>
+                    <div class="dashboard-actions">
+                        <button class="btn btn-outline" id="openProfile">Profile</button>
+                        <button class="btn btn-danger" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+                <div class="grid stats-grid" id="statsGrid"></div>
+                <div id="dashboardMain"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Disease Hotspot Map Modal -->
+    <div id="mapModal" class="modal" aria-hidden="true">
+        <div class="modal-dialog large" style="max-width:1100px;">
+            <button class="modal-close" id="closeMap">×</button>
+            <div class="modal-body">
+                <h3><i class="fas fa-map-marked-alt"></i> Disease Hotspots Near You</h3>
+                <p class="muted">Real-time disease outbreak tracking in your vicinity</p>
+                
+                <div style="display:flex;gap:1rem;margin-top:1rem;">
+                    <div style="flex:1;">
+                        <div id="mapContainer" style="width:100%;height:500px;background:#f3f4f6;border-radius:12px;position:relative;overflow:hidden;">
+                            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+                                <i class="fas fa-spinner fa-spin fa-3x" style="color:#1e90ff;"></i>
+                                <p style="margin-top:1rem;color:#6b7280;">Loading map...</p>
+                            </div>
+                        </div>
+                        <div style="margin-top:1rem;padding:1rem;background:rgba(30,144,255,0.05);border-radius:8px;border-left:4px solid #1e90ff;">
+                            <p style="margin:0;font-size:0.9rem;"><strong>Your Location:</strong> <span id="userLocation">Detecting...</span></p>
+                        </div>
+                    </div>
+                    
+                    <div style="width:280px;">
+                        <h4 style="margin-top:0;">Legend</h4>
+                        <div class="card" style="padding:0.75rem;margin-bottom:0.5rem;border-left:4px solid #ef4444;">
+                            <div style="display:flex;align-items:center;gap:0.5rem;">
+                                <i class="fas fa-circle" style="color:#ef4444;"></i>
+                                <span><strong>High Risk</strong> - Critical outbreak</span>
+                            </div>
+                        </div>
+                        <div class="card" style="padding:0.75rem;margin-bottom:0.5rem;border-left:4px solid #f59e0b;">
+                            <div style="display:flex;align-items:center;gap:0.5rem;">
+                                <i class="fas fa-circle" style="color:#f59e0b;"></i>
+                                <span><strong>Medium Risk</strong> - Active cases</span>
+                            </div>
+                        </div>
+                        <div class="card" style="padding:0.75rem;margin-bottom:1rem;border-left:4px solid #10b981;">
+                            <div style="display:flex;align-items:center;gap:0.5rem;">
+                                <i class="fas fa-circle" style="color:#10b981;"></i>
+                                <span><strong>Low Risk</strong> - Few cases</span>
+                            </div>
+                        </div>
+                        
+                        <h4>Nearby Hotspots</h4>
+                        <div id="hotspotList" style="max-height:300px;overflow-y:auto;">
+                            <p class="muted" style="font-size:0.9rem;">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <button class="modal-close" id="closeLogin">×</button>
+            <div class="modal-body">
+                <h3>Login to Nabha Connect</h3>
+                
+                <!-- Demo Credentials Section -->
+                <div style="background:linear-gradient(135deg, rgba(30,144,255,0.08), rgba(124,58,237,0.08)); padding:1rem; border-radius:10px; margin-bottom:1.5rem; border:1px solid rgba(30,144,255,0.2);">
+                    <h4 style="margin:0 0 0.75rem 0; font-size:0.95rem; color:#0f172a; display:flex; align-items:center; gap:0.5rem;">
+                        <i class="fas fa-key" style="color:#1e90ff;"></i> Demo Credentials
+                    </h4>
+                    <div style="display:grid; gap:0.5rem; font-size:0.85rem;">
+                        <div style="background:rgba(255,255,255,0.7); padding:0.5rem 0.75rem; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong style="color:#1e90ff;">Patient:</strong> 
+                                <code style="background:rgba(30,144,255,0.1); padding:0.15rem 0.4rem; border-radius:4px; margin-left:0.25rem;">patient@test.com</code>
+                            </div>
+                            <button type="button" class="btn btn-ghost" style="padding:0.25rem 0.5rem; font-size:0.8rem;" onclick="document.getElementById('loginEmail').value='patient@test.com'; document.getElementById('loginPassword').value='test123'; document.getElementById('loginRole').value='patient';">Use</button>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.7); padding:0.5rem 0.75rem; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong style="color:#7c3aed;">Doctor:</strong> 
+                                <code style="background:rgba(124,58,237,0.1); padding:0.15rem 0.4rem; border-radius:4px; margin-left:0.25rem;">doctor@test.com</code>
+                            </div>
+                            <button type="button" class="btn btn-ghost" style="padding:0.25rem 0.5rem; font-size:0.8rem;" onclick="document.getElementById('loginEmail').value='doctor@test.com'; document.getElementById('loginPassword').value='test123'; document.getElementById('loginRole').value='doctor';">Use</button>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.7); padding:0.5rem 0.75rem; border-radius:6px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong style="color:#f59e0b;">Admin:</strong> 
+                                <code style="background:rgba(245,158,11,0.1); padding:0.15rem 0.4rem; border-radius:4px; margin-left:0.25rem;">admin@test.com</code>
+                            </div>
+                            <button type="button" class="btn btn-ghost" style="padding:0.25rem 0.5rem; font-size:0.8rem;" onclick="document.getElementById('loginEmail').value='admin@test.com'; document.getElementById('loginPassword').value='test123'; document.getElementById('loginRole').value='admin';">Use</button>
+                        </div>
+                        <p style="margin:0.5rem 0 0 0; font-size:0.8rem; color:#6b7280; text-align:center;">
+                            Password for all: <code style="background:rgba(0,0,0,0.05); padding:0.15rem 0.4rem; border-radius:4px;">test123</code>
+                        </p>
+                    </div>
+                </div>
+
+                <form id="loginForm">
+                    <label>Email
+                        <input type="email" id="loginEmail" required placeholder="you@example.com">
+                    </label>
+                    <label>Password
+                        <input type="password" id="loginPassword" required placeholder="••••••">
+                    </label>
+                    <label class="role-select">Role
+                        <select id="loginRole"><option value="patient">Patient</option><option value="doctor">Doctor</option><option value="admin">Admin</option></select>
+                    </label>
+                    <div class="modal-actions">
+                        <button class="btn btn-primary" type="submit">Login</button>
+                        <button class="btn btn-ghost" type="button" id="toRegister">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Symptom Modal (re-uses questionnaire content) -->
+    <div id="symptomModal" class="modal" aria-hidden="true">
+        <div class="modal-dialog large">
+            <button class="modal-close" id="closeSymptom">×</button>
+            <div class="modal-body">
+                <h3>Symptom Assessment</h3>
+                <form id="symptomForm">
+                    <div class="form-grid-two">
+                        <label>Full name<input id="s_name" required></label>
+                        <label>Age<input id="s_age" type="number" min="0"></label>
+                        <label>Phone<input id="s_phone" type="tel"></label>
+                        <label>Urgency<select id="s_urgency"><option value="routine">Routine</option><option value="urgent">Urgent</option><option value="emergency">Emergency</option></select></label>
+                    </div>
+                    <label>Describe symptoms<textarea id="s_desc" rows="4" required></textarea></label>
+                    <div class="modal-actions">
+                        <button class="btn btn-primary" type="submit">Submit & Request Doctor</button>
+                        <button class="btn btn-ghost" type="button" id="cancelSymptom">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <button class="modal-close" id="closeRegister">×</button>
+            <div class="modal-body">
+                <h3>Create Your Account</h3>
+                <p class="muted">Join Nabha Connect to access quality healthcare</p>
+                <form id="registerForm">
+                    <div class="form-grid-two">
+                        <label>First Name
+                            <input type="text" id="regFirstName" required placeholder="John">
+                        </label>
+                        <label>Last Name
+                            <input type="text" id="regLastName" required placeholder="Doe">
+                        </label>
+                    </div>
+                    <label>Email Address
+                        <input type="email" id="regEmail" required placeholder="you@example.com">
+                    </label>
+                    <div class="form-grid-two">
+                        <label>Password
+                            <input type="password" id="regPassword" required placeholder="••••••••" minlength="6">
+                        </label>
+                        <label>Confirm Password
+                            <input type="password" id="regConfirmPassword" required placeholder="••••••••" minlength="6">
+                        </label>
+                    </div>
+                    <label>Phone Number
+                        <input type="tel" id="regPhone" required placeholder="+1 (555) 123-4567">
+                    </label>
+                    <label>Date of Birth
+                        <input type="date" id="regDob" required>
+                    </label>
+                    <label>Gender
+                        <select id="regGender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                            <option value="prefer-not-to-say">Prefer not to say</option>
+                        </select>
+                    </label>
+                    <label class="role-select">Account Type
+                        <select id="regRole">
+                            <option value="patient">Patient</option>
+                            <option value="doctor">Doctor (Medical Professional)</option>
+                        </select>
+                    </label>
+                    <label style="display:flex;align-items:center;gap:0.5rem;margin-top:1rem;">
+                        <input type="checkbox" id="regTerms" required style="width:auto;">
+                        <span>I agree to the Terms of Service and Privacy Policy</span>
+                    </label>
+                    <div class="modal-actions">
+                        <button class="btn btn-primary" type="submit">Create Account</button>
+                        <button class="btn btn-ghost" type="button" id="backToLogin">Back to Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Call Modal -->
+    <div id="videoCallModal" class="modal" aria-hidden="true">
+        <div class="modal-dialog" style="max-width:1400px;height:90vh;max-height:900px;">
+            <button class="modal-close" id="closeVideoCall" onclick="endVideoCall()">×</button>
+            <div class="modal-body" style="padding:0;height:100%;display:flex;flex-direction:column;">
+                <!-- Video Call Interface -->
+                <div style="flex:1;display:flex;flex-direction:column;background:#1a1a1a;border-radius:12px;overflow:hidden;">
+                    <!-- Header -->
+                    <div style="background:rgba(0,0,0,0.5);padding:1rem;display:flex;justify-content:space-between;align-items:center;">
+                        <div style="color:white;display:flex;align-items:center;gap:1rem;">
+                            <i class="fas fa-user-md" style="font-size:1.2rem;"></i>
+                            <span id="videoParticipantName" style="font-weight:600;">Dr. Sarah Johnson</span>
+                            <span style="color:#10b981;font-size:0.9rem;"><i class="fas fa-circle" style="font-size:0.6rem;"></i> Connected</span>
+                        </div>
+                        <div style="color:white;">
+                            <i class="fas fa-clock"></i>
+                            <span id="videoCallTimer">00:00</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Video Container -->
+                    <div style="flex:1;position:relative;background:#000;">
+                        <!-- Remote Video -->
+                        <video id="remoteVideo" autoplay playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                        <div id="remotePlaceholder" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e3a8a,#1e40af);color:white;">
+                            <i class="fas fa-user-md" style="font-size:4rem;margin-bottom:1rem;opacity:0.5;"></i>
+                            <p style="font-size:1.2rem;">Connecting...</p>
+                        </div>
+                        
+                        <!-- Local Video (Picture-in-Picture) -->
+                        <div style="position:absolute;bottom:1rem;right:1rem;width:240px;height:180px;background:#1a1a1a;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,0.3);">
+                            <video id="localVideo" autoplay muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                            <div id="localPlaceholder" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1a1a1a;color:white;">
+                                <i class="fas fa-user" style="font-size:2rem;opacity:0.5;"></i>
+                                <p style="font-size:0.9rem;margin-top:0.5rem;">You</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Controls -->
+                    <div style="background:rgba(0,0,0,0.8);padding:1.5rem;display:flex;justify-content:center;gap:1rem;">
+                        <button class="btn" id="micBtn" onclick="toggleMic()" style="background:rgba(255,255,255,0.1);color:white;border:none;width:50px;height:50px;border-radius:50%;" title="Mute/Unmute">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button class="btn" id="cameraBtn" onclick="toggleCamera()" style="background:rgba(255,255,255,0.1);color:white;border:none;width:50px;height:50px;border-radius:50%;" title="Camera On/Off">
+                            <i class="fas fa-video"></i>
+                        </button>
+                        <button class="btn" id="screenBtn" onclick="toggleScreenShare()" style="background:rgba(255,255,255,0.1);color:white;border:none;width:50px;height:50px;border-radius:50%;" title="Share Screen">
+                            <i class="fas fa-desktop"></i>
+                        </button>
+                        <button class="btn" id="chatBtn" onclick="toggleVideoChat()" style="background:rgba(255,255,255,0.1);color:white;border:none;width:50px;height:50px;border-radius:50;position:relative;" title="Chat">
+                            <i class="fas fa-comment"></i>
+                        </button>
+                        <button class="btn" onclick="endVideoCall()" style="background:#ef4444;color:white;border:none;width:50px;height:50px;border-radius:50%;" title="End Call">
+                            <i class="fas fa-phone-slash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Records Modal -->
+    <div id="patientRecordsModal" class="modal" aria-hidden="true">
+        <div class="modal-dialog large" style="max-width:900px;max-height:90vh;overflow-y:auto;">
+            <button class="modal-close" id="closePatientRecords">×</button>
+            <div class="modal-body">
+                <h3><i class="fas fa-file-medical"></i> Patient Medical Records</h3>
+                
+                <div style="background:linear-gradient(135deg, rgba(30,144,255,0.08), rgba(124,58,237,0.08)); padding:1.5rem; border-radius:10px; margin-bottom:1.5rem; border:1px solid rgba(30,144,255,0.2);">
+                    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+                        <div>
+                            <p style="margin:0;color:#6b7280;font-size:0.85rem;">Patient Name</p>
+                            <h4 style="margin:0.25rem 0;color:#0f172a;" id="patientRecordName">John Doe</h4>
+                        </div>
+                        <div>
+                            <p style="margin:0;color:#6b7280;font-size:0.85rem;">Age / Gender</p>
+                            <h4 style="margin:0.25rem 0;color:#0f172a;" id="patientRecordAge">45 years / Male</h4>
+                        </div>
+                        <div>
+                            <p style="margin:0;color:#6b7280;font-size:0.85rem;">Phone</p>
+                            <h4 style="margin:0.25rem 0;color:#0f172a;" id="patientRecordPhone">+1 (555) 123-4567</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

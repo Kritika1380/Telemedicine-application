@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Consultation - Nabha Connect</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Video Call Interface -->
+    <section class="video-call-section">
+        <!-- Header -->
+        <div class="video-call-header">
+            <div class="call-info">
+                <div class="participant-info">
+                    <i class="fas fa-user-md"></i>
+                    <span id="participantName">Dr. Sarah Johnson</span>
+                </div>
+                <div class="call-timer">
+                    <i class="fas fa-clock"></i>
+                    <span id="callTimer">00:00</span>
+                </div>
+            </div>
+            <div class="call-header-actions">
+                <button class="btn-icon-header" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Video Container -->
+        <div class="video-container">
+            <!-- Remote Video (Doctor/Patient) -->
+            <div class="remote-video-wrapper">
+                <video id="remoteVideo" autoplay playsinline></video>
+                <div class="video-placeholder" id="remotePlaceholder">
+                    <i class="fas fa-user-md"></i>
+                    <p>Connecting...</p>
+                </div>
+                <div class="remote-video-info">
+                    <span class="participant-name" id="remoteName">Dr. Sarah Johnson</span>
+                    <span class="connection-status" id="connectionStatus">
+                        <i class="fas fa-circle"></i> Connected
+                    </span>
+                </div>
+            </div>
+
+            <!-- Local Video (Self) -->
+            <div class="local-video-wrapper">
+                <video id="localVideo" autoplay muted playsinline></video>
+                <div class="video-placeholder" id="localPlaceholder">
+                    <i class="fas fa-user"></i>
+                    <p>You</p>
+                </div>
+                <div class="local-video-controls">
+                    <span>You</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="video-controls">
+            <div class="control-group">
+                <!-- Microphone Control -->
+                <button class="control-btn" id="micBtn" onclick="toggleMic()" title="Mute/Unmute">
+                    <i class="fas fa-microphone"></i>
+                </button>
+
+                <!-- Camera Control -->
+                <button class="control-btn" id="cameraBtn" onclick="toggleCamera()" title="Turn Camera On/Off">
+                    <i class="fas fa-video"></i>
+                </button>
+
+                <!-- Screen Share -->
+                <button class="control-btn" id="screenBtn" onclick="toggleScreenShare()" title="Share Screen">
+                    <i class="fas fa-desktop"></i>
+                </button>
+
+                <!-- Chat -->
+                <button class="control-btn" id="chatBtn" onclick="toggleChat()" title="Open Chat">
+                    <i class="fas fa-comment"></i>
+                    <span class="notification-badge" id="chatBadge" style="display: none;">0</span>
+                </button>
+
+                <!-- Medical Notes (Doctor Only) -->
+                <button class="control-btn" id="notesBtn" onclick="toggleNotes()" title="Medical Notes">
+                    <i class="fas fa-notes-medical"></i>
+                </button>
+
+                <!-- End Call -->
+                <button class="control-btn end-call" id="endCallBtn" onclick="endCall()" title="End Call">
+                    <i class="fas fa-phone-slash"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel" id="sidePanel">
+            <!-- Chat Panel -->
+            <div class="panel-content" id="chatPanel" style="display: none;">
+                <div class="panel-header">
+                    <h3><i class="fas fa-comment"></i> Chat</h3>
+                    <button class="btn-close" onclick="closePanel()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-message received">
+                        <div class="message-sender">Dr. Sarah Johnson</div>
+                        <div class="message-content">Hello! How are you feeling today?</div>
+                        <div class="message-time">10:30 AM</div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
+                    <button class="btn-send" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Notes Panel (Doctor Only) -->
+            <div class="panel-content" id="notesPanel" style="display: none;">
+                <div class="panel-header">
+                    <h3><i class="fas fa-notes-medical"></i> Medical Notes</h3>
+                    <button class="btn-close" onclick="closePanel()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="notes-content">
+                    <div class="patient-summary">
+                        <h4>Patient Information</h4>
+                        <div class="summary-item">
+                            <strong>Name:</strong> John Doe
+                        </div>
+                        <div class="summary-item">
+                            <strong>Age:</strong> 45 | <strong>Gender:</strong> Male
+                        </div>
+                        <div class="summary-item">
+                            <strong>Main Symptoms:</strong> Fever, Cough, Body Ache
+                        </div>
+                        <div class="summary-item">
+                            <strong>Duration:</strong> 2-3 days
+                        </div>
+                    </div>
+                    <div class="notes-editor">
+                        <h4>Consultation Notes</h4>
+                        <textarea id="medicalNotes" placeholder="Enter your medical notes here..." rows="8"></textarea>
+                    </div>
+                    <div class="prescription-section">
+                        <h4>Prescription</h4>
+                        <textarea id="prescriptionNotes" placeholder="Enter prescription details..." rows="5"></textarea>
+                    </div>
+                    <div class="notes-actions">
+                        <button class="btn btn-primary" onclick="saveNotes()">
+                            <i class="fas fa-save"></i> Save Notes
+                        </button>
+                        <button class="btn btn-secondary" onclick="generatePrescription()">
+                            <i class="fas fa-prescription"></i> Generate Prescription
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Info Panel -->
+            <div class="panel-content" id="patientInfoPanel" style="display: none;">
+                <div class="panel-header">
+                    <h3><i class="fas fa-user"></i> Patient Details</h3>
+                    <button class="btn-close" onclick="closePanel()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="patient-details-content">
+                    <div class="detail-group">
+                        <h4>Personal Information</h4>
+                        <div class="detail-item">
+                            <span class="label">Full Name:</span>
+                            <span class="value">John Doe</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Age:</span>
+                            <span class="value">45 years</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Gender:</span>
+                            <span class="value">Male</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Phone:</span>
+                            <span class="value">+1 (555) 123-4567</span>
+                        </div>
+                    </div>
+                    <div class="detail-group">
+                        <h4>Current Symptoms</h4>
+                        <div class="symptoms-list">
+                            <span class="symptom-tag">Fever</span>
+                            <span class="symptom-tag">Cough</span>
+                            <span class="symptom-tag">Body Ache</span>
+                        </div>
+                        <p class="symptom-description">
+                            Patient reports experiencing high fever (102°F), persistent cough, and body ache for the past 2-3 days. Symptoms started suddenly and have been gradually worsening.
+                        </p>
+                    </div>
+                    <div class="detail-group">
+                        <h4>Medical History</h4>
+                        <div class="detail-item">
+                            <span class="label">Existing Conditions:</span>
+                            <span class="value">None</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Current Medications:</span>
+                            <span class="value">None</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Allergies:</span>
+                            <span class="value">None</span>
+                        </div>
+                    </div>
+                    <div class="detail-group">
+                        <h4>Vitals</h4>
+                        <div class="vitals-grid">
+                            <div class="vital-item">
+                                <i class="fas fa-thermometer-half"></i>
+                                <span class="vital-label">Temperature</span>
+                                <span class="vital-value">102°F</span>
+                            </div>
+                            <div class="vital-item">
+                                <i class="fas fa-heartbeat"></i>
+                                <span class="vital-label">Heart Rate</span>
+                                <span class="vital-value">85 bpm</span>
+                            </div>
+                            <div class="vital-item">
+                                <i class="fas fa-wind"></i>
+                                <span class="vital-label">Oxygen Level</span>
+                                <span class="vital-value">97%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Connection Quality Indicator -->
+    <div class="connection-quality" id="connectionQuality">
+        <i class="fas fa-signal"></i>
+        <span>Good Connection</span>
+    </div>
+
+    <!-- Call Ended Modal -->
+    <div class="modal" id="callEndedModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-phone-slash"></i>
+            </div>
+            <h2>Call Ended</h2>
+            <p>Your consultation has ended.</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="returnToDashboard()">
+                    <i class="fas fa-home"></i> Return to Dashboard
+                </button>
+                <button class="btn btn-secondary" onclick="viewConsultationSummary()">
+                    <i class="fas fa-file-alt"></i> View Summary
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/video-call.js"></script>
+</body>
+</html>

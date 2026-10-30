@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptom Assessment - Nabha Connect</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Nabha Connect</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="user-dashboard.html">Dashboard</a></li>
+                    <li><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Questionnaire Section -->
+    <section class="questionnaire-section">
+        <div class="container">
+            <div class="questionnaire-container">
+                <div class="questionnaire-header">
+                    <i class="fas fa-file-medical-alt"></i>
+                    <h1>Symptom Assessment Questionnaire</h1>
+                    <p>Please provide detailed information about your symptoms. This will help the doctor understand your condition better.</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="currentStep">1</span> of <span id="totalSteps">5</span>
+                    </div>
+                </div>
+
+                <form id="symptomForm" class="symptom-form">
+                    <!-- Step 1: Basic Information -->
+                    <div class="form-step active" data-step="1">
+                        <h2><i class="fas fa-info-circle"></i> Basic Information</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="patientName">Full Name *</label>
+                                <input type="text" id="patientName" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patientAge">Age *</label>
+                                <input type="number" id="patientAge" name="age" min="1" max="120" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patientGender">Gender *</label>
+                                <select id="patientGender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="patientPhone">Phone Number *</label>
+                                <input type="tel" id="patientPhone" name="phone" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="patientAddress">Address</label>
+                            <textarea id="patientAddress" name="address" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Current Symptoms -->
+                    <div class="form-step" data-step="2">
+                        <h2><i class="fas fa-thermometer"></i> Current Symptoms</h2>
+                        <div class="form-group">
+                            <label>What are your main symptoms? (Select all that apply)</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="fever">
+                                    <span><i class="fas fa-temperature-high"></i> Fever</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="cough">
+                                    <span><i class="fas fa-lungs"></i> Cough</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="headache">
+                                    <span><i class="fas fa-head-side-cough"></i> Headache</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="bodyache">
+                                    <span><i class="fas fa-user-injured"></i> Body Ache</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="nausea">
+                                    <span><i class="fas fa-dizzy"></i> Nausea</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="fatigue">
+                                    <span><i class="fas fa-tired"></i> Fatigue</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="breathing">
+                                    <span><i class="fas fa-wind"></i> Breathing Issues</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="chest-pain">
+                                    <span><i class="fas fa-heartbeat"></i> Chest Pain</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="stomach">
+                                    <span><i class="fas fa-stomach"></i> Stomach Pain</span>
+                                </label>
+                                <label class="checkbox-card">
+                                    <input type="checkbox" name="symptoms" value="other">
+                                    <span><i class="fas fa-plus"></i> Other</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="symptomDescription">Describe your symptoms in detail *</label>
+                            <textarea id="symptomDescription" name="symptomDetails" rows="4" placeholder="Please describe what you're experiencing..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="symptomDuration">How long have you had these symptoms? *</label>
+                            <select id="symptomDuration" name="duration" required>
+                                <option value="">Select Duration</option>
+                                <option value="few-hours">Few hours</option>
+                                <option value="1-day">1 day</option>
+                                <option value="2-3-days">2-3 days</option>
+                                <option value="4-7-days">4-7 days</option>
+                                <option value="1-2-weeks">1-2 weeks</option>
+                                <option value="more-than-2-weeks">More than 2 weeks</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Medical History -->
+                    <div class="form-step" data-step="3">
+                        <h2><i class="fas fa-notes-medical"></i> Medical History</h2>
+                        <div class="form-group">
+                            <label>Do you have any existing medical conditions?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="medicalCondition" value="yes" onchange="toggleMedicalConditions(true)">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="medicalCondition" value="no" onchange="toggleMedicalConditions(false)" checked>
+                                    <span>No</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="conditionsGroup" style="display: none;">
+                            <label>Select your existing conditions:</label>
+                            <div class="checkbox-list">
+                                <label><input type="checkbox" name="conditions" value="diabetes"> Diabetes</label>
+                                <label><input type="checkbox" name="conditions" value="hypertension"> Hypertension (High BP)</label>
+                                <label><input type="checkbox" name="conditions" value="heart"> Heart Disease</label>
+                                <label><input type="checkbox" name="conditions" value="asthma"> Asthma</label>
+                                <label><input type="checkbox" name="conditions" value="thyroid"> Thyroid</label>
+                                <label><input type="checkbox" name="conditions" value="kidney"> Kidney Disease</label>
+                                <label><input type="checkbox" name="conditions" value="other-condition"> Other</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Are you currently taking any medications?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="takingMedication" value="yes" onchange="toggleMedications(true)">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="takingMedication" value="no" onchange="toggleMedications(false)" checked>
+                                    <span>No</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="medicationsGroup" style="display: none;">
+                            <label for="medicationsList">Please list your current medications:</label>
+                            <textarea id="medicationsList" name="medications" rows="3" placeholder="List medication names and dosages..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Do you have any allergies?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="hasAllergies" value="yes" onchange="toggleAllergies(true)">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="hasAllergies" value="no" onchange="toggleAllergies(false)" checked>
+                                    <span>No</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="allergiesGroup" style="display: none;">
+                            <label for="allergiesList">Please list your allergies:</label>
+                            <textarea id="allergiesList" name="allergies" rows="2" placeholder="Food allergies, drug allergies, etc..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Lifestyle & Vitals -->
+                    <div class="form-step" data-step="4">
+                        <h2><i class="fas fa-heartbeat"></i> Lifestyle & Vitals</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="temperature">Temperature (°F)</label>
+                                <input type="number" id="temperature" name="temperature" step="0.1" placeholder="98.6">
+                            </div>
+                            <div class="form-group">
+                                <label for="bloodPressure">Blood Pressure</label>
+                                <input type="text" id="bloodPressure" name="bloodPressure" placeholder="120/80">
+                            </div>
+                            <div class="form-group">
+                                <label for="heartRate">Heart Rate (bpm)</label>
+                                <input type="number" id="heartRate" name="heartRate" placeholder="72">
+                            </div>
+                            <div class="form-group">
+                                <label for="oxygenLevel">Oxygen Level (%)</label>
+                                <input type="number" id="oxygenLevel" name="oxygenLevel" min="0" max="100" placeholder="98">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Do you smoke?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="smoking" value="yes">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="smoking" value="no" checked>
+                                    <span>No</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="smoking" value="occasionally">
+                                    <span>Occasionally</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Do you consume alcohol?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="alcohol" value="yes">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="alcohol" value="no" checked>
+                                    <span>No</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="alcohol" value="occasionally">
+                                    <span>Occasionally</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Additional Information -->
+                    <div class="form-step" data-step="5">
+                        <h2><i class="fas fa-comment-medical"></i> Additional Information</h2>
+                        <div class="form-group">
+                            <label for="painLevel">Pain Level (0-10)</label>
+                            <div class="pain-scale">
+                                <input type="range" id="painLevel" name="painLevel" min="0" max="10" value="0" oninput="updatePainLevel(this.value)">
+                                <div class="pain-scale-labels">
+                                    <span>No Pain (0)</span>
+                                    <span id="painValue" class="pain-value">0</span>
+                                    <span>Worst Pain (10)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="urgencyLevel">How urgent is your consultation? *</label>
+                            <select id="urgencyLevel" name="urgency" required>
+                                <option value="">Select Urgency</option>
+                                <option value="emergency">Emergency - Need immediate help</option>
+                                <option value="urgent">Urgent - Within few hours</option>
+                                <option value="soon">Soon - Within 24 hours</option>
+                                <option value="routine">Routine - General consultation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="additionalNotes">Any additional information for the doctor?</label>
+                            <textarea id="additionalNotes" name="additionalInfo" rows="4" placeholder="Any other details you want to share..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="consent-label">
+                                <input type="checkbox" id="consentCheck" name="consent" required>
+                                <span>I consent to sharing this information with the doctor and understand that this is for medical consultation purposes only.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Form Navigation -->
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">
+                            <i class="fas fa-paper-plane"></i> Submit & Connect to Doctor
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - Nabha Connect</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar dashboard-nav">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Nabha Connect</span>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">Welcome, <strong id="userName">John Doe</strong></span>
+                    <button class="btn btn-small btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard">
+        <div class="container">
+            <div class="dashboard-grid">
+                <!-- Sidebar -->
+                <aside class="dashboard-sidebar">
+                    <div class="sidebar-menu">
+                        <a href="#" class="menu-item active">
+                            <i class="fas fa-th-large"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="symptom-questionnaire.html" class="menu-item">
+                            <i class="fas fa-file-medical"></i>
+                            <span>New Consultation</span>
+                        </a>
+                        <a href="#" class="menu-item" onclick="showSection('appointments')">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>My Appointments</span>
+                        </a>
+                        <a href="#" class="menu-item" onclick="showSection('records')">
+                            <i class="fas fa-folder-open"></i>
+                            <span>Medical Records</span>
+                        </a>
+                        <a href="#" class="menu-item" onclick="showSection('prescriptions')">
+                            <i class="fas fa-prescription"></i>
+                            <span>Prescriptions</span>
+                        </a>
+                        <a href="#" class="menu-item" onclick="showSection('profile')">
+                            <i class="fas fa-user-cog"></i>
+                            <span>Profile Settings</span>
+                        </a>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="dashboard-main">
+                    <!-- Overview Section -->
+                    <div class="dashboard-section" id="overview">
+                        <h1>Dashboard Overview</h1>
+                        
+                        <!-- Stats Cards -->
+                        <div class="stats-grid">
+                            <div class="stat-card blue">
+                                <div class="stat-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>5</h3>
+                                    <p>Total Consultations</p>
+                                </div>
+                            </div>
+                            <div class="stat-card green">
+                                <div class="stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>2</h3>
+                                    <p>Upcoming Appointments</p>
+                                </div>
+                            </div>
+                            <div class="stat-card orange">
+                                <div class="stat-icon">
+                                    <i class="fas fa-prescription"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>3</h3>
+                                    <p>Active Prescriptions</p>
+                                </div>
+                            </div>
+                            <div class="stat-card purple">
+                                <div class="stat-icon">
+                                    <i class="fas fa-file-medical-alt"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <h3>12</h3>
+                                    <p>Medical Reports</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="quick-actions">
+                            <h2>Quick Actions</h2>
+                            <div class="actions-grid">
+                                <a href="symptom-questionnaire.html" class="action-card">
+                                    <i class="fas fa-video"></i>
+                                    <h3>Start Consultation</h3>
+                                    <p>Connect with a doctor now</p>
+                                </a>
+                                <a href="#" class="action-card">
+                                    <i class="fas fa-calendar-plus"></i>
+                                    <h3>Book Appointment</h3>
+                                    <p>Schedule for later</p>
+                                </a>
+                                <a href="#" class="action-card">
+                                    <i class="fas fa-history"></i>
+                                    <h3>View History</h3>
+                                    <p>Past consultations</p>
+                                </a>
+                                <a href="#" class="action-card">
+                                    <i class="fas fa-download"></i>
+                                    <h3>Download Reports</h3>
+                                    <p>Get medical documents</p>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Recent Consultations -->
+                        <div class="recent-consultations">
+                            <h2>Recent Consultations</h2>
+                            <div class="consultations-list">
+                                <div class="consultation-item">
+                                    <div class="doctor-avatar">
+                                        <i class="fas fa-user-md"></i>
+                                    </div>
+                                    <div class="consultation-details">
+                                        <h4>Dr. Sarah Johnson</h4>
+                                        <p>General Physician</p>
+                                        <span class="date"><i class="fas fa-calendar"></i> Nov 14, 2025</span>
+                                    </div>
+                                    <div class="consultation-status completed">
+                                        <i class="fas fa-check-circle"></i> Completed
+                                    </div>
+                                    <button class="btn btn-small btn-secondary">View Details</button>
+                                </div>
+                                <div class="consultation-item">
+                                    <div class="doctor-avatar">
+                                        <i class="fas fa-user-md"></i>
+                                    </div>
+                                    <div class="consultation-details">
+                                        <h4>Dr. Michael Chen</h4>
+                                        <p>Cardiologist</p>
+                                        <span class="date"><i class="fas fa-calendar"></i> Nov 10, 2025</span>
+                                    </div>
+                                    <div class="consultation-status completed">
+                                        <i class="fas fa-check-circle"></i> Completed
+                                    </div>
+                                    <button class="btn btn-small btn-secondary">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
